@@ -1,0 +1,11 @@
+:root {
+  font-size: 62.5%; // -> 10px
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-text-default);
+  font-family: 'Open Sans', arial, sans-serif;
+  font-size: var(--text-size-md);
+  line-height: var(--line-height-text-default);
+}

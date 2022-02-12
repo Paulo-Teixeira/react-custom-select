@@ -1,7 +1,9 @@
 import React from 'react';
 import logo from './logo.svg';
 import { Counter } from './features/counter/Counter';
-import './App.css';
+import Icon from './features/icon';
+import Input from './features/input';
+import './App.scss';
 
 function App() {
   return (
@@ -9,6 +11,8 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <Counter />
+        <Icon iconName="warning" />
+        <Input id="test" name="test" onChange={() => console.log('hi')} type="text" />
         <p>
           Edit <code>src/App.tsx</code> and save to reload.
         </p>
