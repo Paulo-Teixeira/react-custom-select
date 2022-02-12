@@ -42,13 +42,6 @@ const Input: FunctionComponent<Props> = ({
   type,
   value,
 }) => {
-  // Gestion des classes actives.
-  const inputActiveClasses = [styles.input];
-
-  if (hasWarning) {
-    inputActiveClasses.push(styles.warning);
-  }
-
   // Affiche picto à droite de l'input. Non applicable si `textarea`.
   let endIcon = iconRight && setIcon(iconRight);
 
