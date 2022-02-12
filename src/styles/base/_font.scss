@@ -5,7 +5,7 @@
 body {
   background-color: var(--color-background);
   color: var(--color-text-default);
-  font-family: 'Open Sans', arial, sans-serif;
+  font-family: var(--font-family);
   font-size: var(--text-size-md);
   line-height: var(--line-height-text-default);
 }

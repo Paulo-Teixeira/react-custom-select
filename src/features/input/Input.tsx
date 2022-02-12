@@ -3,7 +3,7 @@ import { FunctionComponent } from 'react';
 import styles from './Input.module.scss';
 import Icon from '../icon';
 
-const setIcon = (iconName: string) => <Icon iconName={iconName} />;
+const setIcon = (iconName: string, className?: string) => <Icon iconName={iconName} className={className} />;
 
 type Props = {
   autoFocus?: boolean;
@@ -26,7 +26,7 @@ type Props = {
 
 const Input: FunctionComponent<Props> = ({
   autoFocus,
-  defaultValue = '',
+  defaultValue,
   iconRight,
   id,
   isDisabled,
@@ -41,26 +41,33 @@ const Input: FunctionComponent<Props> = ({
   readOnly,
   type,
   value,
-  ...props
 }) => {
+  // Gestion des classes actives.
+  const inputActiveClasses = [styles.input];
+
+  if (hasWarning) {
+    inputActiveClasses.push(styles.warning);
+  }
+
   // Affiche picto à droite de l'input. Non applicable si `textarea`.
   let endIcon = iconRight && setIcon(iconRight);
 
   // Affiche picto de warning.
-  endIcon = hasWarning ? setIcon('exclamation-triangle') : endIcon;
+  endIcon = hasWarning ? setIcon('warning', 'warning') : endIcon;
 
   // Déplace le focus dans le champ à la demande.
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (autoFocus) {
-      inputRef?.current?.focus();
+      inputRef.current?.focus();
     }
   }, [autoFocus]);
 
   return (
-    <div>
+    <div className={styles.wrapper}>
       <input
+        className={`${styles.input} ${hasWarning && styles.warning}`}
         autoFocus={autoFocus}
         defaultValue={defaultValue}
         disabled={isDisabled}
@@ -70,9 +77,10 @@ const Input: FunctionComponent<Props> = ({
         name={name}
         onChange={onChange}
         placeholder={placeholder}
+        readOnly={readOnly}
         ref={inputRef}
+        type={type}
         value={value}
-        {...props}
       />
       {endIcon}
     </div>

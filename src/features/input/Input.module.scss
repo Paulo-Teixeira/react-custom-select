@@ -1,0 +1,50 @@
+.wrapper {
+  position: relative;
+  transform-style: preserve-3d;
+  line-height: 0;
+  width: 100%;
+
+  & > svg {
+    position: absolute;
+    text-align: center;
+    top: 50%;
+    transform: translateY(-50%);
+
+    &:last-child {
+      right: 0;
+      margin-right: var(--spacing-md);
+    }
+  }
+}
+
+.input {
+  background-color: var(--color-base);
+  background-image: none;
+  border: var(--border-width-thick) solid transparent;
+  border-radius: var(--border-radius-wide);
+  box-shadow: none;
+  color: var(--color-text-default);
+  font-family: inherit;
+  font-size: var(--text-size-sm);
+  height: 4.2rem;
+  margin: 0;
+  padding: {
+    left: var(--spacing-md);
+    right: var(--spacing-xl);
+  }
+  width: 100%;
+
+  &:focus {
+    outline: none;
+  }
+
+  &::placeholder {
+    color: var(--color-text-default);
+    font-weight: var(--font-weight-bold);
+    font-family: var(--font-family);
+  }
+}
+
+.warning {
+  border-color: var(--color-warning);
+}

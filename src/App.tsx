@@ -12,7 +12,14 @@ function App() {
         <img src={logo} className="App-logo" alt="logo" />
         <Counter />
         <Icon iconName="warning" />
-        <Input id="test" name="test" onChange={() => console.log('hi')} type="text" />
+        <Input
+          iconRight="chevronDown"
+          id="test"
+          name="test"
+          onChange={() => console.log('hi')}
+          type="text"
+          placeholder="Veuillez sélectionner"
+        />
         <p>
           Edit <code>src/App.tsx</code> and save to reload.
         </p>

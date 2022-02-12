@@ -4,14 +4,15 @@ import { icons } from '../../assets/icons';
 
 type Props = {
   iconName: string;
+  className?: string;
 };
 
-const Icon: FunctionComponent<Props> = ({ iconName }) => {
+const Icon: FunctionComponent<Props> = ({ iconName, className }) => {
   return (
     <svg className={styles.svg} width="20" height="20" viewBox="0 0 20 20">
-    <title>{iconName}</title>
+      <title>{iconName}</title>
       {/* @ts-ignore */}
-      <path className={styles.path} d={icons[iconName]} />
+      <path className={`${styles.path} ${styles[className]}`} d={icons[iconName]} />
     </svg>
   );
 };
