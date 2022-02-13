@@ -3,7 +3,9 @@ import { FunctionComponent } from 'react';
 import styles from './Input.module.scss';
 import Icon from '../icon';
 
-const setIcon = (iconName: string, className?: string) => <Icon iconName={iconName} className={className} />;
+const setIcon = (iconName: string, className?: string) => (
+  <Icon iconName={iconName} className={className} />
+);
 
 type Props = {
   autoFocus?: boolean;
@@ -41,6 +43,7 @@ const Input: FunctionComponent<Props> = ({
   readOnly,
   type,
   value,
+  ...props
 }) => {
   // Affiche picto à droite de l'input. Non applicable si `textarea`.
   let endIcon = iconRight && setIcon(iconRight);
@@ -74,6 +77,7 @@ const Input: FunctionComponent<Props> = ({
         ref={inputRef}
         type={type}
         value={value}
+        {...props}
       />
       {endIcon}
     </div>

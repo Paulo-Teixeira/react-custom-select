@@ -1,0 +1,29 @@
+.item {
+  align-items: center;
+  border-bottom: var(--border-width-thin) solid var(--color-border);
+  display: flex;
+  font-size: var(--text-size-md);
+  justify-content: space-between;
+  margin: 0 var(--spacing-default);
+  padding: var(--spacing-sm) 0;
+
+  &:last-child {
+    border-bottom: 0;
+  }
+}
+
+.startLabel {
+  font-style: normal;
+  font-weight: var(--font-weight-bold);
+}
+
+.text {
+  display: inline-block;
+  margin: 0;
+  font-size: var(--text-size-sm);
+}
+
+.endLabel {
+  @extend .startLabel;
+  color: var(--color-danger);
+}

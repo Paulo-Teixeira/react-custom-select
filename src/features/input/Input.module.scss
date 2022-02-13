@@ -12,7 +12,7 @@
 
     &:last-child {
       right: 0;
-      margin-right: var(--spacing-md);
+      margin-right: var(--spacing-default);
     }
   }
 }
@@ -21,7 +21,6 @@
   background-color: var(--color-base);
   background-image: none;
   border: var(--border-width-thick) solid transparent;
-  border-radius: var(--border-radius-wide);
   box-shadow: none;
   color: var(--color-text-default);
   font-family: inherit;
@@ -30,7 +29,7 @@
   margin: 0;
   padding: {
     left: var(--spacing-md);
-    right: var(--spacing-xl);
+    right: var(--spacing-lg);
   }
   width: 100%;
 
