@@ -4,13 +4,18 @@ import styles from './SelectList.module.scss';
 
 type Props = {
   children: React.ReactElement[];
+  isExpanded: boolean;
 };
 
-const SelectList: FunctionComponent<Props> = ({ children }) => {
+const SelectList: FunctionComponent<Props> = ({ children, isExpanded }) => {
   const selectListRef = useRef<HTMLUListElement>(null);
 
   return (
-    <ul className={styles.list} role="listbox" ref={selectListRef}>
+    <ul
+      className={`${styles.list} ${isExpanded ? styles.expanded : ''}`}
+      role="listbox"
+      ref={selectListRef}
+    >
       {children}
     </ul>
   );

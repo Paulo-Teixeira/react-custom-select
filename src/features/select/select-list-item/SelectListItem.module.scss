@@ -1,6 +1,7 @@
 .item {
   align-items: center;
   border-bottom: var(--border-width-thin) solid var(--color-border);
+  cursor: pointer;
   display: flex;
   font-size: var(--text-size-md);
   justify-content: space-between;
@@ -9,6 +10,11 @@
 
   &:last-child {
     border-bottom: 0;
+  }
+
+  &:hover,
+  &:focus {
+    background-color: var(--color-text-hover);
   }
 }
 
@@ -26,4 +32,8 @@
 .endLabel {
   @extend .startLabel;
   color: var(--color-danger);
+}
+
+.isActive {
+  background-color: var(--color-text-hover);
 }

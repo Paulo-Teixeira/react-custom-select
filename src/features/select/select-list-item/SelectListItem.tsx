@@ -5,17 +5,21 @@ import { Option } from '../selectAPI';
 
 type Props = {
   option: Option;
-  ariaChecked: boolean;
-  ariaSelected: boolean;
+  onMouseDown: (event: React.MouseEvent<HTMLElement>) => void;
+  dataIndex: number;
+  isActive: boolean;
 };
 
-const SelectListItem: FunctionComponent<Props> = ({ option, ariaChecked, ariaSelected }) => {
+const SelectListItem: FunctionComponent<Props> = ({ option, onMouseDown, dataIndex, isActive }) => {
   return (
     <li
-      className={styles.item}
+      className={`${styles.item} ${isActive ? styles.isActive : ''}`}
       role="option"
-      aria-checked={ariaChecked}
-      aria-selected={ariaSelected}
+      aria-checked={isActive}
+      aria-selected={isActive}
+      onMouseDown={onMouseDown}
+      data-value={option.size}
+      data-index={dataIndex}
     >
       <em className={styles.startLabel}>{option.size}</em>
       <p className={styles.text}>{option.info}</p>

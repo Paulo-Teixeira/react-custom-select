@@ -1,7 +1,7 @@
 .list {
   border: var(--border-width-thick) solid var(--color-border);
   border-top: 0;
-  display: block;
+  display: none;
   font-family: inherit;
   list-style-type: none;
   left: 0;
@@ -17,6 +17,6 @@
   z-index: 10;
 }
 
-.isExpanded {
+.expanded {
   display: block;
 }

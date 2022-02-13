@@ -19,6 +19,8 @@ type Props = {
   maxLength?: number;
   minLength?: number;
   name: string;
+  onBlur: (event: React.FocusEvent<HTMLInputElement>) => void;
+  onClick: (event: React.MouseEvent<HTMLInputElement>) => void;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
   readOnly?: boolean;
@@ -38,14 +40,15 @@ const Input: FunctionComponent<Props> = ({
   maxLength = 120,
   minLength = 40,
   name,
+  onBlur,
+  onClick,
   onChange,
   placeholder,
   readOnly,
   type,
   value,
-  ...props
 }) => {
-  // Affiche picto à droite de l'input. Non applicable si `textarea`.
+  // Affiche picto à droite de l'input.
   let endIcon = iconRight && setIcon(iconRight);
 
   // Affiche picto de warning.
@@ -71,13 +74,14 @@ const Input: FunctionComponent<Props> = ({
         maxLength={maxLength}
         minLength={minLength}
         name={name}
+        onBlur={onBlur}
+        onClick={onClick}
         onChange={onChange}
         placeholder={placeholder}
         readOnly={readOnly}
         ref={inputRef}
         type={type}
         value={value}
-        {...props}
       />
       {endIcon}
     </div>
