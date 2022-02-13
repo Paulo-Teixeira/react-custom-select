@@ -9,6 +9,8 @@ import {
   selectValue,
   selectCurrentIndex,
   selectState,
+  setOptions,
+  selectOptionsList,
 } from './selectSlice';
 import { FunctionComponent } from 'react';
 import styles from './Select.module.scss';
@@ -48,8 +50,12 @@ const Select: FunctionComponent<Props> = ({
   const optionValue = useAppSelector(selectValue);
   const showState = useAppSelector(selectState);
   const optionIndex = useAppSelector(selectCurrentIndex);
+  const optionsList = useAppSelector(selectOptionsList);
 
   const dispatch = useAppDispatch();
+
+  // Send fake data to store.
+  dispatch(setOptions(options));
 
   // Component wrapper.
   const selectRef = useRef<HTMLDivElement>(null);
@@ -71,7 +77,7 @@ const Select: FunctionComponent<Props> = ({
   // Keyboard Navigation.
   const handleKeyNavigation = useCallback(
     (e: React.KeyboardEvent) => {
-      const optionsLength: number = options.length - 1;
+      const optionsLength: number = optionsList.length - 1;
 
       if (optionsLength > 0) {
         const keyPressed: string = e.key;
@@ -83,7 +89,7 @@ const Select: FunctionComponent<Props> = ({
         }
       }
     },
-    [options.length, isExpanded, optionIndex, dispatch]
+    [optionsList.length, isExpanded, optionIndex, dispatch]
   );
 
   // Select option with Enter key.
@@ -91,12 +97,12 @@ const Select: FunctionComponent<Props> = ({
     (e: React.KeyboardEvent) => {
       if (isExpanded && e.key === 'Enter') {
         e.preventDefault();
-        dispatch(setValue(options[optionIndex].size));
+        dispatch(setValue(optionsList[optionIndex].size));
         dispatch(setOptionIndex(optionIndex));
         dispatch(collapse());
       }
     },
-    [options, isExpanded, optionIndex, dispatch]
+    [optionsList, isExpanded, optionIndex, dispatch]
   );
 
   // Close with Escape key.
@@ -110,14 +116,14 @@ const Select: FunctionComponent<Props> = ({
   );
 
   // Collapse list on click outside.
-  const handleClickOutside = useCallback(
-    (e) => {
-      if (!selectRef.current?.contains(e.currentTarget)) {
-        dispatch(collapse());
-      }
-    },
-    [dispatch]
-  );
+  // const handleClickOutside = useCallback(
+  //   (e) => {
+  //     if (!selectRef.current?.contains(e.currentTarget)) {
+  //       dispatch(collapse());
+  //     }
+  //   },
+  //   [dispatch]
+  // );
 
   // Handler for keydown events.
   const onKeyDownHandler = useCallback(
@@ -140,20 +146,17 @@ const Select: FunctionComponent<Props> = ({
   };
 
   useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
+    //document.addEventListener('mousedown', handleClickOutside);
     document.addEventListener('keydown', onKeyDownHandler);
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      //document.removeEventListener('mousedown', handleClickOutside);
       document.removeEventListener('keydown', onKeyDownHandler);
     };
-  }, [handleClickOutside, onKeyDownHandler]);
+  }, [onKeyDownHandler]);
 
   return (
     <>
-      <div className={styles.state}>
-        <pre>{JSON.stringify(showState)}</pre>
-      </div>
       <div className={`${styles.wrapper}`} ref={selectRef}>
         <Input
           readOnly
@@ -175,8 +178,8 @@ const Select: FunctionComponent<Props> = ({
         />
         <div className={`${styles.listWrapper} ${isExpanded ? styles.isExpanded : ''}`}>
           <p className={styles.selectLabel}>{selectTitle} :</p>
-          <SelectList>
-            {options.map((option, index) => {
+          <SelectList isExpanded={isExpanded}>
+            {optionsList.map((option, index) => {
               const activeIndex = index === optionIndex;
 
               return (

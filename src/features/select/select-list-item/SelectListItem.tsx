@@ -1,4 +1,3 @@
-import { useRef, useEffect } from 'react';
 import { FunctionComponent } from 'react';
 import styles from './SelectListItem.module.scss';
 import { Option } from '../selectAPI';
