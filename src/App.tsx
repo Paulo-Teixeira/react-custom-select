@@ -7,6 +7,7 @@ function App() {
   return (
     <div className="App">
       <Select
+        selectTitle="Taille"
         id="SizeSelector"
         name="SizeSelector"
         placeholder="Veuillez sélectionner"

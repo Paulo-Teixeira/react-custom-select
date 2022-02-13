@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useCallback, useState, ReactEventHandler } from 'react';
+import React, { useRef, useEffect, useCallback } from 'react';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import {
   expand,
@@ -28,6 +28,7 @@ type Props = {
   name: string;
   options: Option[];
   placeholder?: string;
+  selectTitle: string;
 };
 
 const Select: FunctionComponent<Props> = ({
@@ -41,6 +42,7 @@ const Select: FunctionComponent<Props> = ({
   name,
   options,
   placeholder,
+  selectTitle,
 }) => {
   const isExpanded = useAppSelector(selectIsExpanded);
   const optionValue = useAppSelector(selectValue);
@@ -66,45 +68,86 @@ const Select: FunctionComponent<Props> = ({
     dispatch(collapse());
   };
 
-  // Collapse list on click outside.
-  // const handleClickOutside = (e: React.KeyboardEvent) => {
-  //   if (!selectRef.current?.contains(e.currentTarget)) {
-  //     dispatch(collapse());
-  //   }
-  // };
+  // Keyboard Navigation.
+  const handleKeyNavigation = useCallback(
+    (e: React.KeyboardEvent) => {
+      const optionsLength: number = options.length - 1;
+
+      if (optionsLength > 0) {
+        const keyPressed: string = e.key;
+
+        if (isExpanded && keyPressed === 'ArrowDown') {
+          dispatch(setOptionIndex(optionIndex >= optionsLength ? 0 : optionIndex + 1));
+        } else if (isExpanded && keyPressed === 'ArrowUp') {
+          dispatch(setOptionIndex(optionIndex <= 0 ? optionsLength : optionIndex - 1));
+        }
+      }
+    },
+    [options.length, isExpanded, optionIndex, dispatch]
+  );
+
+  // Select option with Enter key.
+  const handleEnterKeySelection = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (isExpanded && e.key === 'Enter') {
+        e.preventDefault();
+        dispatch(setValue(options[optionIndex].size));
+        dispatch(setOptionIndex(optionIndex));
+        dispatch(collapse());
+      }
+    },
+    [options, isExpanded, optionIndex, dispatch]
+  );
 
   // Close with Escape key.
-  const handleEscClose = (e: KeyboardEvent) => {
-    if (e.key === 'Escape') {
-      dispatch(collapse());
-    }
-  };
+  const handleEscClose = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        dispatch(collapse());
+      }
+    },
+    [dispatch]
+  );
+
+  // Collapse list on click outside.
+  const handleClickOutside = useCallback(
+    (e) => {
+      if (!selectRef.current?.contains(e.currentTarget)) {
+        dispatch(collapse());
+      }
+    },
+    [dispatch]
+  );
 
   // Handler for keydown events.
   const onKeyDownHandler = useCallback(
     (e) => {
       handleEscClose(e);
+      handleKeyNavigation(e);
+      handleEnterKeySelection(e);
     },
-    [handleEscClose]
+    [handleEscClose, handleKeyNavigation, handleEnterKeySelection]
   );
 
-  // Open the select list options.
+  // Open the select list on focus.
+  const onFocusHandler = (): void => {
+    dispatch(expand());
+  };
+
+  // Open the select list on click.
   const onInputClickHandler = (): void => {
     dispatch(expand());
   };
 
-  // Close the select list options
-  const onBlurHandler = (): void => {
-    dispatch(collapse());
-  };
-
   useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
     document.addEventListener('keydown', onKeyDownHandler);
 
     return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
       document.removeEventListener('keydown', onKeyDownHandler);
     };
-  }, [onKeyDownHandler]);
+  }, [handleClickOutside, onKeyDownHandler]);
 
   return (
     <>
@@ -122,29 +165,32 @@ const Select: FunctionComponent<Props> = ({
           hasWarning={hasWarning}
           id={id}
           isValid={isValid}
-          onBlur={onBlurHandler}
           onClick={onInputClickHandler}
           onChange={() => console.log('changed')}
+          onFocus={onFocusHandler}
           placeholder={placeholder}
           name={name}
           type="text"
           value={optionValue}
         />
-        <SelectList isExpanded={isExpanded}>
-          {options.map((option, index) => {
-            const activeIndex = index === optionIndex;
+        <div className={`${styles.listWrapper} ${isExpanded ? styles.isExpanded : ''}`}>
+          <p className={styles.selectLabel}>{selectTitle} :</p>
+          <SelectList>
+            {options.map((option, index) => {
+              const activeIndex = index === optionIndex;
 
-            return (
-              <SelectListItem
-                key={option.size}
-                option={option}
-                onMouseDown={optionMouseDownHandler}
-                dataIndex={index}
-                isActive={activeIndex}
-              />
-            );
-          })}
-        </SelectList>
+              return (
+                <SelectListItem
+                  key={option.size}
+                  option={option}
+                  onMouseDown={optionMouseDownHandler}
+                  dataIndex={index}
+                  isActive={activeIndex}
+                />
+              );
+            })}
+          </SelectList>
+        </div>
       </div>
     </>
   );

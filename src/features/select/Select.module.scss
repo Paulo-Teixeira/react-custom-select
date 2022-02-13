@@ -6,6 +6,25 @@
   }
 }
 
+.listWrapper {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+}
+
+.isExpanded {
+  display: block;
+}
+
+.selectLabel {
+  background-color: var(--color-base);
+  font-weight: var(--font-weight-bold);
+  margin: 0;
+  padding: var(--spacing-default);
+}
+
 .state {
   width: 10rem;
 }

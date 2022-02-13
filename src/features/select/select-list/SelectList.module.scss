@@ -1,7 +1,7 @@
 .list {
   border: var(--border-width-thick) solid var(--color-border);
   border-top: 0;
-  display: none;
+  display: block;
   font-family: inherit;
   list-style-type: none;
   left: 0;
@@ -11,12 +11,7 @@
   overflow-x: hidden;
   overflow-y: auto;
   padding: 0;
-  position: absolute;
   width: 100%;
   top: 100%;
   z-index: 10;
-}
-
-.expanded {
-  display: block;
 }

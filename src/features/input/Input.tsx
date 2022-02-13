@@ -19,9 +19,9 @@ type Props = {
   maxLength?: number;
   minLength?: number;
   name: string;
-  onBlur: (event: React.FocusEvent<HTMLInputElement>) => void;
   onClick: (event: React.MouseEvent<HTMLInputElement>) => void;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onFocus: (event: React.FocusEvent<HTMLInputElement>) => void;
   placeholder?: string;
   readOnly?: boolean;
   type: string;
@@ -40,9 +40,9 @@ const Input: FunctionComponent<Props> = ({
   maxLength = 120,
   minLength = 40,
   name,
-  onBlur,
   onClick,
   onChange,
+  onFocus,
   placeholder,
   readOnly,
   type,
@@ -74,9 +74,9 @@ const Input: FunctionComponent<Props> = ({
         maxLength={maxLength}
         minLength={minLength}
         name={name}
-        onBlur={onBlur}
         onClick={onClick}
         onChange={onChange}
+        onFocus={onFocus}
         placeholder={placeholder}
         readOnly={readOnly}
         ref={inputRef}
