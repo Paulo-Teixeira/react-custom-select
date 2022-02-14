@@ -19,6 +19,7 @@ const SelectListItem: FunctionComponent<Props> = ({ option, onMouseDown, dataInd
       onMouseDown={onMouseDown}
       data-value={option.size}
       data-index={dataIndex}
+      data-stock={option.stock}
     >
       <div className={styles.optionWrap}>
         <em className={styles.startLabel}>{option.size}</em>

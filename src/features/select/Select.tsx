@@ -12,13 +12,14 @@ import {
   selectOptionsList,
   setSafeMode,
   selectSafeMode,
+  selectOutOfStock,
+  setOutOfStock,
 } from './selectSlice';
 import { FunctionComponent } from 'react';
 import styles from './Select.module.scss';
 import Input from '../input';
 import SelectList from './select-list';
 import SelectListItem from './select-list-item';
-import { Option } from './selectAPI';
 import axios from 'axios';
 
 type Props = {
@@ -26,9 +27,6 @@ type Props = {
   defaultValue?: string;
   id: string;
   isDisabled?: boolean;
-  isValid?: boolean;
-  hasError?: boolean;
-  hasWarning?: boolean;
   name: string;
   placeholder?: string;
   selectTitle: string;
@@ -40,9 +38,6 @@ const Select: FunctionComponent<Props> = ({
   defaultValue,
   id,
   isDisabled,
-  isValid,
-  hasError,
-  hasWarning,
   name,
   placeholder,
   selectTitle,
@@ -54,6 +49,7 @@ const Select: FunctionComponent<Props> = ({
   const optionIndex = useAppSelector(selectCurrentIndex);
   const optionsList = useAppSelector(selectOptionsList);
   const safeMode = useAppSelector(selectSafeMode);
+  const isOutOfStock = useAppSelector(selectOutOfStock);
 
   const dispatch = useAppDispatch();
 
@@ -66,6 +62,7 @@ const Select: FunctionComponent<Props> = ({
     const option = e.currentTarget as HTMLLIElement;
 
     dispatch(setValue(option.dataset.value));
+    dispatch(setOutOfStock(option.dataset.stock === '0'));
 
     if (option.dataset.index) {
       dispatch(setOptionIndex(parseInt(option.dataset.index, 10)));
@@ -165,10 +162,8 @@ const Select: FunctionComponent<Props> = ({
           defaultValue={defaultValue}
           isDisabled={isDisabled}
           iconRight="chevronDown"
-          hasError={hasError}
-          hasWarning={hasWarning}
+          hasWarning={isOutOfStock}
           id={id}
-          isValid={isValid}
           onClick={onInputClickHandler}
           onChange={() => console.log('changed')}
           onFocus={onFocusHandler}

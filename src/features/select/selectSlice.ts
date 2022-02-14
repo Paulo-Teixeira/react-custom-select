@@ -9,6 +9,7 @@ export interface SelectState {
   optionHeight: number;
   options: Option[] | null;
   safeMode: boolean;
+  outOfStock: boolean;
 }
 
 const initialState: SelectState = {
@@ -18,6 +19,7 @@ const initialState: SelectState = {
   optionHeight: 0,
   options: null,
   safeMode: false,
+  outOfStock: false,
 };
 
 export const selectSlice = createSlice({
@@ -45,6 +47,9 @@ export const selectSlice = createSlice({
     setSafeMode: (state) => {
       state.safeMode = true;
     },
+    setOutOfStock: (state, action) => {
+      state.outOfStock = action.payload;
+    },
   },
 });
 
@@ -56,6 +61,7 @@ export const {
   setOptionHeight,
   setOptions,
   setSafeMode,
+  setOutOfStock,
 } = selectSlice.actions;
 
 export const selectState = (state: RootState) => state.select;
@@ -65,5 +71,6 @@ export const selectCurrentIndex = (state: RootState) => state.select.optionIndex
 export const selectOptionHeight = (state: RootState) => state.select.optionHeight;
 export const selectOptionsList = (state: RootState) => state.select.options;
 export const selectSafeMode = (state: RootState) => state.select.safeMode;
+export const selectOutOfStock = (state: RootState) => state.select.outOfStock;
 
 export default selectSlice.reducer;
