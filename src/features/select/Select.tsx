@@ -10,7 +10,6 @@ import {
   selectCurrentIndex,
   setOptions,
   selectOptionsList,
-  selectOptionHeight,
 } from './selectSlice';
 import { FunctionComponent } from 'react';
 import styles from './Select.module.scss';
@@ -18,6 +17,7 @@ import Input from '../input';
 import SelectList from './select-list';
 import SelectListItem from './select-list-item';
 import { Option } from './selectAPI';
+import axios from 'axios';
 
 type Props = {
   autoFocus?: boolean;
@@ -52,12 +52,11 @@ const Select: FunctionComponent<Props> = ({
   const optionValue = useAppSelector(selectValue);
   const optionIndex = useAppSelector(selectCurrentIndex);
   const optionsList = useAppSelector(selectOptionsList);
-  const optionHeight = useAppSelector(selectOptionHeight);
 
   const dispatch = useAppDispatch();
 
   // Send fake data to store.
-  dispatch(setOptions(options));
+  //dispatch(setOptions(options));
 
   // Component wrapper.
   const selectRef = useRef<HTMLDivElement>(null);
@@ -81,7 +80,9 @@ const Select: FunctionComponent<Props> = ({
     (e: React.KeyboardEvent) => {
       if (isExpanded && e.key === 'Enter') {
         e.preventDefault();
-        dispatch(setValue(optionsList[optionIndex].size));
+        if (optionsList) {
+          dispatch(setValue(optionsList[optionIndex].size));
+        }
         dispatch(setOptionIndex(optionIndex));
         dispatch(collapse());
       }
@@ -129,6 +130,15 @@ const Select: FunctionComponent<Props> = ({
   };
 
   useEffect(() => {
+    axios.get(`http://localhost:3000/mockData.json`).then((res) => {
+      setTimeout(() => {
+        const result = res.data.options;
+        dispatch(setOptions(result));
+      }, 2000);
+    });
+  }, [dispatch]);
+
+  useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
     document.addEventListener('keydown', onKeyDownHandler);
 
@@ -138,46 +148,50 @@ const Select: FunctionComponent<Props> = ({
     };
   }, [handleClickOutside, onKeyDownHandler]);
 
-  return (
-    <div className={`${styles.wrapper}`} ref={selectRef}>
-      <Input
-        readOnly
-        autoFocus={autoFocus}
-        defaultValue={defaultValue}
-        isDisabled={isDisabled}
-        iconRight="chevronDown"
-        hasError={hasError}
-        hasWarning={hasWarning}
-        id={id}
-        isValid={isValid}
-        onClick={onInputClickHandler}
-        onChange={() => console.log('changed')}
-        onFocus={onFocusHandler}
-        placeholder={placeholder}
-        name={name}
-        type="text"
-        value={optionValue}
-      />
-      <div className={`${styles.listWrapper} ${isExpanded ? styles.isExpanded : ''}`}>
-        <p className={styles.selectLabel}>{selectTitle} :</p>
-        <SelectList isExpanded={isExpanded} numberOfVisibleOptions={numberOfVisibleOptions}>
-          {optionsList.map((option, index) => {
-            const activeIndex = index === optionIndex;
+  if (optionsList) {
+    return (
+      <div className={`${styles.wrapper}`} ref={selectRef}>
+        <Input
+          readOnly
+          autoFocus={autoFocus}
+          defaultValue={defaultValue}
+          isDisabled={isDisabled}
+          iconRight="chevronDown"
+          hasError={hasError}
+          hasWarning={hasWarning}
+          id={id}
+          isValid={isValid}
+          onClick={onInputClickHandler}
+          onChange={() => console.log('changed')}
+          onFocus={onFocusHandler}
+          placeholder={placeholder}
+          name={name}
+          type="text"
+          value={optionValue}
+        />
+        <div className={`${styles.listWrapper} ${isExpanded ? styles.isExpanded : ''}`}>
+          <p className={styles.selectLabel}>{selectTitle} :</p>
+          <SelectList isExpanded={isExpanded} numberOfVisibleOptions={numberOfVisibleOptions}>
+            {optionsList.map((option, index) => {
+              const activeIndex = index === optionIndex;
 
-            return (
-              <SelectListItem
-                key={option.size}
-                option={option}
-                onMouseDown={optionMouseDownHandler}
-                dataIndex={index}
-                isActive={activeIndex}
-              />
-            );
-          })}
-        </SelectList>
+              return (
+                <SelectListItem
+                  key={option.size}
+                  option={option}
+                  onMouseDown={optionMouseDownHandler}
+                  dataIndex={index}
+                  isActive={activeIndex}
+                />
+              );
+            })}
+          </SelectList>
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
+
+  return <div className={`${styles.skeleton} pending`} />;
 };
 
 export default Select;

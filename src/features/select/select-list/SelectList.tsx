@@ -32,8 +32,6 @@ const SelectList: FunctionComponent<Props> = ({ children, isExpanded, numberOfVi
       const item = list.querySelector('[aria-selected="true"]') as HTMLLIElement;
       const itemRealHeight = item.getBoundingClientRect().height;
       const listRealHeight = list.getBoundingClientRect().height;
-      console.log('item.offsetTop', item.offsetTop);
-      console.log('list.scrollTop', list.scrollTop);
 
       const isOutOfUpperView = item.offsetTop < list.scrollTop;
       const isOutOfLowerView = item.offsetTop + itemRealHeight > list.scrollTop + listRealHeight;
@@ -49,6 +47,10 @@ const SelectList: FunctionComponent<Props> = ({ children, isExpanded, numberOfVi
   // Keyboard Navigation.
   const handleKeyNavigation = useCallback(
     (e: React.KeyboardEvent) => {
+      if (!optionsList) {
+        return;
+      }
+
       const optionsLength: number = optionsList.length - 1;
 
       if (optionsLength > 0) {
@@ -62,7 +64,7 @@ const SelectList: FunctionComponent<Props> = ({ children, isExpanded, numberOfVi
         scrollSelectedIntoView();
       }
     },
-    [optionsList.length, isExpanded, optionIndex, dispatch]
+    [optionsList, isExpanded, optionIndex, dispatch]
   );
 
   // Handler for keydown events.
@@ -79,8 +81,6 @@ const SelectList: FunctionComponent<Props> = ({ children, isExpanded, numberOfVi
       const item = selectListRef.current.querySelector('[aria-selected="true"]') as HTMLLIElement;
       const itemHeight = item.getBoundingClientRect().height;
 
-      console.log(item.getBoundingClientRect());
-
       dispatch(setOptionHeight(itemHeight));
     }
   }, [isExpanded, dispatch]);
@@ -94,7 +94,6 @@ const SelectList: FunctionComponent<Props> = ({ children, isExpanded, numberOfVi
   }, [onKeyDownHandler]);
 
   const listStyle = {
-    // add border
     maxHeight: `${optionHeight * numberOfVisibleOptions}px`,
   };
 

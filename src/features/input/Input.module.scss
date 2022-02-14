@@ -33,7 +33,6 @@
     right: var(--spacing-lg);
   }
   width: 100%;
-  text-transform: uppercase;
 
   &:focus {
     outline: none;
@@ -44,6 +43,7 @@
     color: var(--color-text-default);
     font-weight: var(--font-weight-bold);
     font-family: var(--font-family);
+    text-transform: uppercase;
   }
 }
 

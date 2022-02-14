@@ -7,17 +7,6 @@
   margin: 0;
   line-height: var(--line-height-text-alt);
 
-  // @media screen and (max-width: 40rem) {
-  //   display: grid;
-  //   grid-template-columns: auto 1fr;
-  //   grid-template-rows: repeat(2, 1fr);
-  //   grid-gap: var(--spacing-default);
-  //   padding: {
-  //     right: var(--spacing-sm);
-  //     left: var(--spacing-sm);
-  //   }
-  // }
-
   &:last-child .optionWrap {
     border-bottom-color: transparent;
   }
@@ -76,11 +65,11 @@
 .endLabel {
   @extend .startLabel;
   color: var(--color-danger);
+  text-align: end;
 
   @media screen and (max-width: 40rem) {
     grid-column-start: 2;
     grid-row-start: 1;
-    text-align: right;
   }
 }
 

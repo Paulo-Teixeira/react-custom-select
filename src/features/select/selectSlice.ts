@@ -7,7 +7,7 @@ export interface SelectState {
   value: string;
   optionIndex: number;
   optionHeight: number;
-  options: Option[];
+  options: Option[] | null;
 }
 
 const initialState: SelectState = {
@@ -15,7 +15,7 @@ const initialState: SelectState = {
   value: '',
   optionIndex: 0,
   optionHeight: 0,
-  options: [],
+  options: null,
 };
 
 export const selectSlice = createSlice({

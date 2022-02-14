@@ -7,15 +7,19 @@
 }
 
 .listWrapper {
-  display: none;
+  display: block;
+  opacity: 0;
+  pointer-events: none;
   position: absolute;
   top: 100%;
   left: 0;
   width: 100%;
+  transition: opacity var(--duration-immediately) ease-in;
 }
 
 .isExpanded {
-  display: block;
+  opacity: 1;
+  pointer-events: all;
 }
 
 .selectLabel {
@@ -24,4 +28,10 @@
   margin: 0;
   padding: var(--spacing-default);
   position: relative;
+}
+
+.skeleton {
+  width: 100%;
+  height: 4.2rem;
+  border: var(--border-width-thick) solid var(--color-border);
 }
