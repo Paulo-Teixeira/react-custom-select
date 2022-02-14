@@ -10,6 +10,8 @@ import {
   selectCurrentIndex,
   setOptions,
   selectOptionsList,
+  setSafeMode,
+  selectSafeMode,
 } from './selectSlice';
 import { FunctionComponent } from 'react';
 import styles from './Select.module.scss';
@@ -43,7 +45,6 @@ const Select: FunctionComponent<Props> = ({
   hasError,
   hasWarning,
   name,
-  options,
   placeholder,
   selectTitle,
   numberOfVisibleOptions,
@@ -52,11 +53,9 @@ const Select: FunctionComponent<Props> = ({
   const optionValue = useAppSelector(selectValue);
   const optionIndex = useAppSelector(selectCurrentIndex);
   const optionsList = useAppSelector(selectOptionsList);
+  const safeMode = useAppSelector(selectSafeMode);
 
   const dispatch = useAppDispatch();
-
-  // Send fake data to store.
-  //dispatch(setOptions(options));
 
   // Component wrapper.
   const selectRef = useRef<HTMLDivElement>(null);
@@ -130,12 +129,19 @@ const Select: FunctionComponent<Props> = ({
   };
 
   useEffect(() => {
-    axios.get(`http://localhost:3000/mockData.json`).then((res) => {
-      setTimeout(() => {
-        const result = res.data.options;
-        dispatch(setOptions(result));
-      }, 2000);
-    });
+    axios
+      .get(`http://localhost:3000/mockData.json`)
+      .then((res) => {
+        setTimeout(() => {
+          const result = res.data.options;
+          dispatch(setOptions(result));
+        }, 2000);
+      })
+      .catch(function (error) {
+        if (error.response) {
+          dispatch(setSafeMode());
+        }
+      });
   }, [dispatch]);
 
   useEffect(() => {
@@ -191,7 +197,15 @@ const Select: FunctionComponent<Props> = ({
     );
   }
 
-  return <div className={`${styles.skeleton} pending`} />;
+  if (safeMode) {
+    return (
+      <div className={styles.safeMode}>
+        <p>Sélection momentanement indisponible.</p>
+      </div>
+    );
+  }
+
+  return <div className={`${styles.skeleton} pending`} aria-disabled="true" aria-label="loading" />;
 };
 
 export default Select;

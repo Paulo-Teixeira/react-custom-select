@@ -1,5 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState, AppThunk } from '../../app/store';
+import { createSlice } from '@reduxjs/toolkit';
+import { RootState } from '../../app/store';
 import { Option } from './selectAPI';
 
 export interface SelectState {
@@ -8,6 +8,7 @@ export interface SelectState {
   optionIndex: number;
   optionHeight: number;
   options: Option[] | null;
+  safeMode: boolean;
 }
 
 const initialState: SelectState = {
@@ -16,6 +17,7 @@ const initialState: SelectState = {
   optionIndex: 0,
   optionHeight: 0,
   options: null,
+  safeMode: false,
 };
 
 export const selectSlice = createSlice({
@@ -40,11 +42,21 @@ export const selectSlice = createSlice({
     setOptions: (state, action) => {
       state.options = action.payload;
     },
+    setSafeMode: (state) => {
+      state.safeMode = true;
+    },
   },
 });
 
-export const { expand, collapse, setValue, setOptionIndex, setOptionHeight, setOptions } =
-  selectSlice.actions;
+export const {
+  expand,
+  collapse,
+  setValue,
+  setOptionIndex,
+  setOptionHeight,
+  setOptions,
+  setSafeMode,
+} = selectSlice.actions;
 
 // Selectors.
 export const selectState = (state: RootState) => state.select;
@@ -53,5 +65,6 @@ export const selectValue = (state: RootState) => state.select.value;
 export const selectCurrentIndex = (state: RootState) => state.select.optionIndex;
 export const selectOptionHeight = (state: RootState) => state.select.optionHeight;
 export const selectOptionsList = (state: RootState) => state.select.options;
+export const selectSafeMode = (state: RootState) => state.select.safeMode;
 
 export default selectSlice.reducer;
