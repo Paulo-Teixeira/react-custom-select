@@ -4,7 +4,7 @@ import { Option } from '../selectAPI';
 
 type Props = {
   option: Option;
-  onMouseDown: (event: React.MouseEvent<HTMLElement>) => void;
+  onMouseDown: (event: React.MouseEvent<HTMLLIElement>) => void;
   dataIndex: number;
   isActive: boolean;
 };

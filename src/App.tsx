@@ -12,6 +12,7 @@ function App() {
         name="SizeSelector"
         placeholder="Veuillez sélectionner"
         options={DATA}
+        numberOfVisibleOptions={6}
       />
     </div>
   );

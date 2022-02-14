@@ -1,6 +1,5 @@
 .wrapper {
   position: relative;
-  height: 100%;
 
   input {
     cursor: pointer;
@@ -24,8 +23,5 @@
   font-weight: var(--font-weight-bold);
   margin: 0;
   padding: var(--spacing-default);
-}
-
-.state {
-  width: 10rem;
+  position: relative;
 }

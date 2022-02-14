@@ -8,9 +8,9 @@ import {
   selectIsExpanded,
   selectValue,
   selectCurrentIndex,
-  selectState,
   setOptions,
   selectOptionsList,
+  selectOptionHeight,
 } from './selectSlice';
 import { FunctionComponent } from 'react';
 import styles from './Select.module.scss';
@@ -31,6 +31,7 @@ type Props = {
   options: Option[];
   placeholder?: string;
   selectTitle: string;
+  numberOfVisibleOptions: number;
 };
 
 const Select: FunctionComponent<Props> = ({
@@ -45,12 +46,13 @@ const Select: FunctionComponent<Props> = ({
   options,
   placeholder,
   selectTitle,
+  numberOfVisibleOptions,
 }) => {
   const isExpanded = useAppSelector(selectIsExpanded);
   const optionValue = useAppSelector(selectValue);
-  const showState = useAppSelector(selectState);
   const optionIndex = useAppSelector(selectCurrentIndex);
   const optionsList = useAppSelector(selectOptionsList);
+  const optionHeight = useAppSelector(selectOptionHeight);
 
   const dispatch = useAppDispatch();
 
@@ -73,24 +75,6 @@ const Select: FunctionComponent<Props> = ({
 
     dispatch(collapse());
   };
-
-  // Keyboard Navigation.
-  const handleKeyNavigation = useCallback(
-    (e: React.KeyboardEvent) => {
-      const optionsLength: number = optionsList.length - 1;
-
-      if (optionsLength > 0) {
-        const keyPressed: string = e.key;
-
-        if (isExpanded && keyPressed === 'ArrowDown') {
-          dispatch(setOptionIndex(optionIndex >= optionsLength ? 0 : optionIndex + 1));
-        } else if (isExpanded && keyPressed === 'ArrowUp') {
-          dispatch(setOptionIndex(optionIndex <= 0 ? optionsLength : optionIndex - 1));
-        }
-      }
-    },
-    [optionsList.length, isExpanded, optionIndex, dispatch]
-  );
 
   // Select option with Enter key.
   const handleEnterKeySelection = useCallback(
@@ -116,23 +100,22 @@ const Select: FunctionComponent<Props> = ({
   );
 
   // Collapse list on click outside.
-  // const handleClickOutside = useCallback(
-  //   (e) => {
-  //     if (!selectRef.current?.contains(e.currentTarget)) {
-  //       dispatch(collapse());
-  //     }
-  //   },
-  //   [dispatch]
-  // );
+  const handleClickOutside = useCallback(
+    (e) => {
+      if (!selectRef.current?.contains(e.target)) {
+        dispatch(collapse());
+      }
+    },
+    [dispatch]
+  );
 
   // Handler for keydown events.
   const onKeyDownHandler = useCallback(
     (e) => {
       handleEscClose(e);
-      handleKeyNavigation(e);
       handleEnterKeySelection(e);
     },
-    [handleEscClose, handleKeyNavigation, handleEnterKeySelection]
+    [handleEscClose, handleEnterKeySelection]
   );
 
   // Open the select list on focus.
@@ -146,56 +129,54 @@ const Select: FunctionComponent<Props> = ({
   };
 
   useEffect(() => {
-    //document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
     document.addEventListener('keydown', onKeyDownHandler);
 
     return () => {
-      //document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
       document.removeEventListener('keydown', onKeyDownHandler);
     };
-  }, [onKeyDownHandler]);
+  }, [handleClickOutside, onKeyDownHandler]);
 
   return (
-    <>
-      <div className={`${styles.wrapper}`} ref={selectRef}>
-        <Input
-          readOnly
-          autoFocus={autoFocus}
-          defaultValue={defaultValue}
-          isDisabled={isDisabled}
-          iconRight="chevronDown"
-          hasError={hasError}
-          hasWarning={hasWarning}
-          id={id}
-          isValid={isValid}
-          onClick={onInputClickHandler}
-          onChange={() => console.log('changed')}
-          onFocus={onFocusHandler}
-          placeholder={placeholder}
-          name={name}
-          type="text"
-          value={optionValue}
-        />
-        <div className={`${styles.listWrapper} ${isExpanded ? styles.isExpanded : ''}`}>
-          <p className={styles.selectLabel}>{selectTitle} :</p>
-          <SelectList isExpanded={isExpanded}>
-            {optionsList.map((option, index) => {
-              const activeIndex = index === optionIndex;
+    <div className={`${styles.wrapper}`} ref={selectRef}>
+      <Input
+        readOnly
+        autoFocus={autoFocus}
+        defaultValue={defaultValue}
+        isDisabled={isDisabled}
+        iconRight="chevronDown"
+        hasError={hasError}
+        hasWarning={hasWarning}
+        id={id}
+        isValid={isValid}
+        onClick={onInputClickHandler}
+        onChange={() => console.log('changed')}
+        onFocus={onFocusHandler}
+        placeholder={placeholder}
+        name={name}
+        type="text"
+        value={optionValue}
+      />
+      <div className={`${styles.listWrapper} ${isExpanded ? styles.isExpanded : ''}`}>
+        <p className={styles.selectLabel}>{selectTitle} :</p>
+        <SelectList isExpanded={isExpanded} numberOfVisibleOptions={numberOfVisibleOptions}>
+          {optionsList.map((option, index) => {
+            const activeIndex = index === optionIndex;
 
-              return (
-                <SelectListItem
-                  key={option.size}
-                  option={option}
-                  onMouseDown={optionMouseDownHandler}
-                  dataIndex={index}
-                  isActive={activeIndex}
-                />
-              );
-            })}
-          </SelectList>
-        </div>
+            return (
+              <SelectListItem
+                key={option.size}
+                option={option}
+                onMouseDown={optionMouseDownHandler}
+                dataIndex={index}
+                isActive={activeIndex}
+              />
+            );
+          })}
+        </SelectList>
       </div>
-    </>
+    </div>
   );
 };
 

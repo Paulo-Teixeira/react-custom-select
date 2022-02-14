@@ -2,4 +2,9 @@
   margin: 0 auto;
   padding-top: 4rem;
   width: 40rem;
+
+  @media screen and (max-width: 40rem) {
+    padding-top: 0;
+    width: 100%;
+  }
 }

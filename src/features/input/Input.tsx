@@ -66,7 +66,7 @@ const Input: FunctionComponent<Props> = ({
   return (
     <div className={styles.wrapper}>
       <input
-        className={`${styles.input} ${hasWarning && styles.warning}`}
+        className={`${styles.input} ${hasWarning ? styles.warning : ''}`}
         autoFocus={autoFocus}
         defaultValue={defaultValue}
         disabled={isDisabled}
