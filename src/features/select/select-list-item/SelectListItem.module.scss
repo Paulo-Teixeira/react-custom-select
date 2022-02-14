@@ -1,13 +1,37 @@
 .item {
-  border-bottom: var(--border-width-thin) solid var(--color-border);
   cursor: pointer;
   // Can't use flex to justify multiple childs because it messes with the scollTop for arrow key navigation.
   // TODO: find more robust solution. Works fine with just one child.
   display: block;
   font-size: var(--text-size-md);
-  margin: 0 var(--spacing-default);
-  padding: var(--spacing-sm) 0;
+  margin: 0;
   line-height: var(--line-height-text-alt);
+
+  // @media screen and (max-width: 40rem) {
+  //   display: grid;
+  //   grid-template-columns: auto 1fr;
+  //   grid-template-rows: repeat(2, 1fr);
+  //   grid-gap: var(--spacing-default);
+  //   padding: {
+  //     right: var(--spacing-sm);
+  //     left: var(--spacing-sm);
+  //   }
+  // }
+
+  &:last-child .optionWrap {
+    border-bottom-color: transparent;
+  }
+
+  &:hover,
+  &:focus {
+    background-color: var(--color-text-hover);
+  }
+}
+
+.optionWrap {
+  border-bottom: var(--border-width-thin) solid var(--color-border);
+  padding: var(--spacing-sm);
+  margin: 0 var(--spacing-default);
 
   @media screen and (max-width: 40rem) {
     display: grid;
@@ -18,15 +42,6 @@
       right: var(--spacing-sm);
       left: var(--spacing-sm);
     }
-  }
-
-  &:last-child {
-    border-bottom-color: transparent;
-  }
-
-  &:hover,
-  &:focus {
-    background-color: var(--color-text-hover);
   }
 }
 

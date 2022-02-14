@@ -24,7 +24,7 @@
   box-shadow: none;
   color: var(--color-text-default);
   font-family: inherit;
-  font-size: var(--text-size-sm);
+  font-size: var(--text-size-default);
   font-weight: var(--font-weight-bold);
   height: 4.2rem;
   margin: 0;
@@ -33,12 +33,14 @@
     right: var(--spacing-lg);
   }
   width: 100%;
+  text-transform: uppercase;
 
   &:focus {
     outline: none;
   }
 
   &::placeholder {
+    opacity: 1;
     color: var(--color-text-default);
     font-weight: var(--font-weight-bold);
     font-family: var(--font-family);
