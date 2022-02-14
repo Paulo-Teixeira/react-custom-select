@@ -1,7 +1,6 @@
 import React from 'react';
 import Select from './features/select';
 import './App.scss';
-import { DATA } from './assets/mockData';
 
 function App() {
   return (
@@ -11,7 +10,6 @@ function App() {
         id="SizeSelector"
         name="SizeSelector"
         placeholder="Veuillez sélectionner"
-        options={DATA}
         numberOfVisibleOptions={6}
       />
     </div>

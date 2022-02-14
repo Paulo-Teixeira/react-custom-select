@@ -58,7 +58,6 @@ export const {
   setSafeMode,
 } = selectSlice.actions;
 
-// Selectors.
 export const selectState = (state: RootState) => state.select;
 export const selectIsExpanded = (state: RootState) => state.select.isExpanded;
 export const selectValue = (state: RootState) => state.select.value;

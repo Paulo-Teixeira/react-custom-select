@@ -30,7 +30,6 @@ type Props = {
   hasError?: boolean;
   hasWarning?: boolean;
   name: string;
-  options: Option[];
   placeholder?: string;
   selectTitle: string;
   numberOfVisibleOptions: number;
@@ -49,6 +48,7 @@ const Select: FunctionComponent<Props> = ({
   selectTitle,
   numberOfVisibleOptions,
 }) => {
+  // Redux store selectors.
   const isExpanded = useAppSelector(selectIsExpanded);
   const optionValue = useAppSelector(selectValue);
   const optionIndex = useAppSelector(selectCurrentIndex);
@@ -128,6 +128,7 @@ const Select: FunctionComponent<Props> = ({
     dispatch(expand());
   };
 
+  // Mock async call for the component data.
   useEffect(() => {
     axios
       .get(`http://localhost:3000/mockData.json`)
@@ -144,6 +145,7 @@ const Select: FunctionComponent<Props> = ({
       });
   }, [dispatch]);
 
+  // Handle Events here.
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
     document.addEventListener('keydown', onKeyDownHandler);

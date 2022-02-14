@@ -16,35 +16,39 @@ type Props = {
 };
 
 const SelectList: FunctionComponent<Props> = ({ children, isExpanded, numberOfVisibleOptions }) => {
+  // List ref to interact with DOM node.
   const selectListRef = useRef<HTMLUListElement>(null);
 
+  // Selectors from the Redux store.
   const optionHeight = useAppSelector(selectOptionHeight);
   const optionsList = useAppSelector(selectOptionsList);
   const optionIndex = useAppSelector(selectCurrentIndex);
 
   const dispatch = useAppDispatch();
 
-  // Moves scroll with keyboard navigation.
+  // Moves scroll with arrow key navigation.
   const scrollSelectedIntoView = () => {
     const list = selectListRef.current;
 
-    if (list !== null) {
-      const item = list.querySelector('[aria-selected="true"]') as HTMLLIElement;
-      const itemRealHeight = item.getBoundingClientRect().height;
-      const listRealHeight = list.getBoundingClientRect().height;
+    if (!list) {
+      return;
+    }
 
-      const isOutOfUpperView = item.offsetTop < list.scrollTop;
-      const isOutOfLowerView = item.offsetTop + itemRealHeight > list.scrollTop + listRealHeight;
+    const item = list.querySelector('[aria-selected="true"]') as HTMLLIElement;
+    const itemRealHeight = item.getBoundingClientRect().height;
+    const listRealHeight = list.getBoundingClientRect().height;
 
-      if (isOutOfUpperView) {
-        list.scrollTop = item.offsetTop;
-      } else if (isOutOfLowerView) {
-        list.scrollTop = item.offsetTop + itemRealHeight - listRealHeight;
-      }
+    const isOutOfUpperView = item.offsetTop < list.scrollTop;
+    const isOutOfLowerView = item.offsetTop + itemRealHeight > list.scrollTop + listRealHeight;
+
+    if (isOutOfUpperView) {
+      list.scrollTop = item.offsetTop;
+    } else if (isOutOfLowerView) {
+      list.scrollTop = item.offsetTop + itemRealHeight - listRealHeight;
     }
   };
 
-  // Keyboard Navigation.
+  // Arrow key navigation.
   const handleKeyNavigation = useCallback(
     (e: React.KeyboardEvent) => {
       if (!optionsList) {
@@ -85,14 +89,15 @@ const SelectList: FunctionComponent<Props> = ({ children, isExpanded, numberOfVi
     }
   }, [isExpanded, dispatch]);
 
+  // Attach and remove listeners.
   useEffect(() => {
     document.addEventListener('keydown', onKeyDownHandler);
-
     return () => {
       document.removeEventListener('keydown', onKeyDownHandler);
     };
   }, [onKeyDownHandler]);
 
+  // Set the list container height to show chosen options.
   const listStyle = {
     maxHeight: `${optionHeight * numberOfVisibleOptions}px`,
   };
